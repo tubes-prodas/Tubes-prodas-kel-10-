@@ -2,8 +2,15 @@
 #include <conio.h>
 #include <cstdlib>
 #include <string.h>
+//add by taufiq
+#include <windows.h>
 
 using namespace std;
+//add by taufiq
+HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+COORD CursorPosition;
+
+void gotoXY(int x, int y);
 	
 typedef struct {
 	char username[11];
@@ -33,6 +40,7 @@ int menu();
 void passing();
 void login();
 void search();
+void gotoxy();
 void persyaratan();
 void inputentry();
 void inputsiswa();
@@ -53,6 +61,13 @@ int inentry = 0,insiswa = 0;
 pelajaran jurusan[6];
 float tkj,rpl,mm,toi,av,titl;
 
+void gotoxy (int x, int y){
+	
+    CursorPosition.X = x; // lokasi x = kolom
+	CursorPosition.Y = y; // lokasi y = baris
+	SetConsoleCursorPosition(console,CursorPosition); // set lokasi / posisi dimana di print
+}
+
 
 main(){ // block program utama
  	standar();
@@ -61,7 +76,7 @@ main(){ // block program utama
 		int pilihan = menu();
 		switch (pilihan){
 			case 1:
-					login(input entry[200]);
+					login();
 				break;
 			case 2:
 					search();
@@ -133,7 +148,7 @@ main(){ // block program utama
 	cout << "---------------------------------------------------------------------\n";
  }
  
- void login(input entry[200]){
+ void login(){
 	char username[10],password[8];
 	system("cls");
 	cout << "---------------------------------------------------------------------\n";
@@ -268,7 +283,7 @@ main(){ // block program utama
 	cout << "|2.| Teknik Rekayasa Perangkat Lunak|\n";
 	cout << "|3.| Teknik Instalasi Tenaga Listrik|\n";
 	cout << "|4.| Teknik Otomasi Industri        |\n";
-	cout << "|5.| Teknik Audio Video             |\n";
+	cout << "|5.| Teknik Audio Video             |\n";	
 	cout << "|6.| Multi Media                    |\n";
 	cout << "-------------------------------------------------------------------------\n";
 	system("pause");
@@ -299,34 +314,10 @@ main(){ // block program utama
  }
  
  void inputsiswa(){
-	bool exist; //inisialisasi variable local
-	do{
-	exist = false;
 	system("cls");
 	cout << "---------------------------------------------------------------------\n";
 	cout << "Masukan No Pendaftaran \t\t\t: ";
 	cin  >> siswa[insiswa].no_pendaftaran;
-	
-	//validasi no_pelajaran 
-	if(insiswa != 0){
-		int i = 0;
-		while(i != (insiswa) && exist != true){
-			if(siswa[i].no_pendaftaran == siswa[insiswa].no_pendaftaran){
-				exist = true;
-			}
-			i++;
-		}
-		if (exist){
-			cout<<"Nomer pendaftaran sudah ada"<<endl;
-			getche();
-		}else{
-			exist = false;
-		}
-	}
-	cout<<insiswa;
-	}while(exist != false);
-	
-	
 	cout << "Masukan Nama Calon Siswa \t\t: ";
 	fflush(stdin);
 	cin.get(siswa[insiswa].nama, 50);
@@ -510,16 +501,53 @@ main(){ // block program utama
  }
  
  void datapendaftar(){
- 	cout << "-----------------------------------------------------------------------------------------------------\n";
-	cout << "--------------------------------------Data Siswa Terdaftar-------------------------------------------\n";
-	cout << "-----------------------------------------------------------------------------------------------------\n";
-	cout << "| No Pendaftaran | Nama                         | L/P | PIL 1 | PIL 2 | MAT | B.INGG | B.INDO | IPA |\n";
-	cout << "-----------------------------------------------------------------------------------------------------\n";
+ 	//add by taufiq
+	cout << "--------------------------------------------------------------------------------"<<endl;
+	cout << "---------------------Data Siswa Terdaftar---------------------------------------"<<endl;
+	cout << "--------------------------------------------------------------------------------"<<endl;
+	cout << "| NP  | Nama             | L/P | PIL 1 | PIL 2 | MAT | B.INGG | B.INDO | IPA |"<<endl;
+	cout << "--------------------------------------------------------------------------------"<<endl;
 	for(int a = 0; a <= insiswa ; a++){
- 		cout << "| "<<siswa[a].no_pendaftaran<<" | "<<siswa[a].nama<<" | "<<siswa[a].jenis_kelamin<<" | "<<siswa[a].jurusan1<<" | "<<siswa[a].jurusan2<<" | "<<siswa[a].nilai.matematika<<" | "<<siswa[a].nilai.b_inggris<<" | "<<siswa[a].nilai.b_indonesia<<" | "<<siswa[a].nilai.ipa<<" |\n";
-		cout << "-----------------------------------------------------------------------------------------------------\n";	
+		//rumus gotoxy
+		// batas x = 80
+		//batas y = 25
+	
+		gotoxy(0,a+8);
+	cout<< "|     |                  |     |       |       |     |        |        |     |";
+		gotoxy(2,8+a);
+		cout<<siswa[a].no_pendaftaran;
+		
+		gotoxy(8,8+a);
+		cout<<siswa[a].nama;
+		
+		gotoxy(26,8+a);
+		cout<<siswa[a].jenis_kelamin;
+		
+		gotoxy(32,8+a);
+		cout<<siswa[a].jurusan1;
+		
+		gotoxy(40,8+a);
+		cout<<siswa[a].jurusan1;
+		gotoxy(49,8+a);
+		cout<<siswa[a].nilai.matematika;
+		
+		gotoxy(56,8+a);
+		cout<<siswa[a].nilai.b_inggris;
+		
+		gotoxy(64,8+a);
+		cout<<siswa[a].nilai.b_indonesia;
+		
+		gotoxy(73,8+a);
+		cout<<siswa[a].nilai.ipa;
+		cout<<endl;
+		
+		
+		
+ 		//cout << "| "<<" | "<<siswa[a].nama<<" | "<<siswa[a].jenis_kelamin<<" | "<<siswa[a].jurusan1<<" | "<<siswa[a].jurusan2<<" | "<<siswa[a].nilai.matematika<<" | "<<siswa[a].nilai.b_inggris<<" | "<<siswa[a].nilai.b_indonesia<<" | "<<siswa[a].nilai.ipa<<" |\n";
+		//cout << "-----------------------------------------------------------------------------------------------------\n";	
+		
 	}
-	cout << "-----------------------------------------------------------------------------------------------------\n";
+	/*cout << "-----------------------------------------------------------------------------------------------------\n";
 	cout << "------------------------------------------Keterangan-------------------------------------------------\n";
 	cout << "-----------------------------------------------------------------------------------------------------\n";
 	cout << "--------------------------------|-----------Daftar Jurusan----------|--------------------------------\n";
@@ -530,49 +558,111 @@ main(){ // block program utama
 	cout << "--------------------------------|5.| Teknik Audio Video             |--------------------------------\n";
 	cout << "--------------------------------|6.| Multi Media                    |--------------------------------\n";
 	cout << "-----------------------------------------------------------------------------------------------------\n"; 
+	*/
 	system("pause");
  }
  
  void dataditerima(){
  	for(int x = 0; x <= 5; x++){
-	 	cout << "-----------------------------------------------------------------------------------------------------\n";
-		cout << "--------------------------------Data Siswa Diterima Di Jurusan "<< x <<"--------------------------------\n";
-		cout << "-----------------------------------------------------------------------------------------------------\n";
-		cout << "| No Pendaftaran | Nama                         | L/P | PIL 1 | PIL 2 | MAT | B.INGG | B.INDO | IPA |\n";
-		cout << "-----------------------------------------------------------------------------------------------------\n";
+	cout << "--------------------------------------------------------------------------------"<<endl;
+	cout << "---------------------Data Siswa Terdaftar---------------------------------------"<<endl;
+	cout << "--------------------------------------------------------------------------------"<<endl;
+	cout << "| NP  | Nama             | L/P | PIL 1 | PIL 2 | MAT | B.INGG | B.INDO | IPA |"<<endl;
+	cout << "--------------------------------------------------------------------------------"<<endl;
 		for(int a = 0; a <= insiswa ; a++){
 			if(siswa[a].status == x){
-		 		cout << "| "<<siswa[a].no_pendaftaran<<" | "<<siswa[a].nama<<" | "<<siswa[a].jenis_kelamin<<" | "<<siswa[a].jurusan1<<" | "<<siswa[a].jurusan2<<" | "<<siswa[a].nilai.matematika<<" | "<<siswa[a].nilai.b_inggris<<" | "<<siswa[a].nilai.b_indonesia<<" | "<<siswa[a].nilai.ipa<<" |\n";
-				cout << "-----------------------------------------------------------------------------------------------------\n";	
+					gotoxy(0,a+8);
+					cout<< "|     |                  |     |       |       |     |        |        |     |";
+					gotoxy(2,8+a);
+					cout<<siswa[a].no_pendaftaran;
+					
+					gotoxy(8,8+a);
+					cout<<siswa[a].nama;
+					
+					gotoxy(26,8+a);
+					cout<<siswa[a].jenis_kelamin;
+					
+					gotoxy(32,8+a);
+					cout<<siswa[a].jurusan1;
+					
+					gotoxy(40,8+a);
+					cout<<siswa[a].jurusan1;
+					gotoxy(49,8+a);
+					cout<<siswa[a].nilai.matematika;
+					
+					gotoxy(56,8+a);
+					cout<<siswa[a].nilai.b_inggris;
+					
+					gotoxy(64,8+a);
+					cout<<siswa[a].nilai.b_indonesia;
+					
+					gotoxy(73,8+a);
+					cout<<siswa[a].nilai.ipa;
+					cout<<endl;
+							
+		 		//cout << "| "<<siswa[a].no_pendaftaran<<" | "<<siswa[a].nama<<" | "<<siswa[a].jenis_kelamin<<" | "<<siswa[a].jurusan1<<" | "<<siswa[a].jurusan2<<" | "<<siswa[a].nilai.matematika<<" | "<<siswa[a].nilai.b_inggris<<" | "<<siswa[a].nilai.b_indonesia<<" | "<<siswa[a].nilai.ipa<<" |\n";
+				//cout << "-----------------------------------------------------------------------------------------------------\n";	
 			}
 		}
-		cout << "-----------------------------------------------------------------------------------------------------\n";
-		cout << "---------------------------------------------Keterangan----------------------------------------------\n";
-		cout << "-----------------------------------------------------------------------------------------------------\n";
-		cout << "--------------------------------|-----------Daftar Jurusan----------|--------------------------------\n";
-		cout << "--------------------------------|1.| Teknik Komputer dan Jaringan   |--------------------------------\n";
-		cout << "--------------------------------|2.| Teknik Rekayasa Perangkat Lunak|--------------------------------\n";
-		cout << "--------------------------------|3.| Teknik Instalasi Tenaga Listrik|--------------------------------\n";
-		cout << "--------------------------------|4.| Teknik Otomasi Industri        |--------------------------------\n";
-		cout << "--------------------------------|5.| Teknik Audio Video             |--------------------------------\n";
-		cout << "--------------------------------|6.| Multi Media                    |--------------------------------\n";
-		cout << "-----------------------------------------------------------------------------------------------------\n"; 
+	/*	
+		cout << "--------------------------------------------------------------------------------"<<endl;
+		cout << "-------------------------------Keterangan---------------------------------------"<<endl;
+		cout << "--------------------------------------------------------------------------------"<<endl;
+		cout << "---------------|-----------Daftar Jurusan----------|----------------------------"<<endl;
+		cout << "---------------|1.| Teknik Komputer dan Jaringan   |----------------------------"<<endl;
+		cout << "---------------|2.| Teknik Rekayasa Perangkat Lunak|----------------------------"<<endl;
+		cout << "---------------|3.| Teknik Instalasi Tenaga Listrik|----------------------------"<<endl;
+		cout << "---------------|4.| Teknik Otomasi Industri        |----------------------------"<<endl;
+		cout << "---------------|5.| Teknik Audio Video             |----------------------------"<<endl;
+		cout << "---------------|6.| Multi Media                    |-----------------------------"<<endl;
+		cout << "---------------------------------------------------------------------------------"<<endl; 
+	 */
 	 }
 	system("pause");
  }
  
  void dataditolak(){
-	 	cout << "-----------------------------------------------------------------------------------------------------\n";
-		cout << "------------------------------------------Data Siswa Ditolak-----------------------------------------\n";
-		cout << "-----------------------------------------------------------------------------------------------------\n";
-		cout << "| No Pendaftaran | Nama                         | L/P | PIL 1 | PIL 2 | MAT | B.INGG | B.INDO | IPA |\n";
-		cout << "-----------------------------------------------------------------------------------------------------\n";
-		for(int a = 0; a <= insiswa ; a++){
+	 	cout << "--------------------------------------------------------------------------------"<<endl;
+		cout << "---------------------Data Siswa Terdaftar---------------------------------------"<<endl;
+		cout << "--------------------------------------------------------------------------------"<<endl;
+		cout << "| NP  | Nama             | L/P | PIL 1 | PIL 2 | MAT | B.INGG | B.INDO | IPA |"<<endl;
+		cout << "--------------------------------------------------------------------------------"<<endl;
+	for(int a = 0; a <= insiswa ; a++){
 			if(siswa[a].status == -1){
-		 		cout << "| "<<siswa[a].no_pendaftaran<<" | "<<siswa[a].nama<<" | "<<siswa[a].jenis_kelamin<<" | "<<siswa[a].jurusan1<<" | "<<siswa[a].jurusan2<<" | "<<siswa[a].nilai.matematika<<" | "<<siswa[a].nilai.b_inggris<<" | "<<siswa[a].nilai.b_indonesia<<" | "<<siswa[a].nilai.ipa<<" |\n";
-				cout << "-----------------------------------------------------------------------------------------------------\n";	
+		 		
+				 	gotoxy(0,a+8);
+					cout<< "|     |                  |     |       |       |     |        |        |     |";
+					gotoxy(2,8+a);
+					cout<<siswa[a].no_pendaftaran;
+					
+					gotoxy(8,8+a);
+					cout<<siswa[a].nama;
+					
+					gotoxy(26,8+a);
+					cout<<siswa[a].jenis_kelamin;
+					
+					gotoxy(32,8+a);
+					cout<<siswa[a].jurusan1;
+					
+					gotoxy(40,8+a);
+					cout<<siswa[a].jurusan1;
+					gotoxy(49,8+a);
+					cout<<siswa[a].nilai.matematika;
+					
+					gotoxy(56,8+a);
+					cout<<siswa[a].nilai.b_inggris;
+					
+					gotoxy(64,8+a);
+					cout<<siswa[a].nilai.b_indonesia;
+					
+					gotoxy(73,8+a);
+					cout<<siswa[a].nilai.ipa;
+					cout<<endl;
+				
+				//cout << "| "<<siswa[a].no_pendaftaran<<" | "<<siswa[a].nama<<" | "<<siswa[a].jenis_kelamin<<" | "<<siswa[a].jurusan1<<" | "<<siswa[a].jurusan2<<" | "<<siswa[a].nilai.matematika<<" | "<<siswa[a].nilai.b_inggris<<" | "<<siswa[a].nilai.b_indonesia<<" | "<<siswa[a].nilai.ipa<<" |\n";
+				//cout << "-----------------------------------------------------------------------------------------------------\n";	
 			}
-		}
+		}/*
 		cout << "-----------------------------------------------------------------------------------------------------\n";
 		cout << "---------------------------------------------Keterangan----------------------------------------------\n";
 		cout << "-----------------------------------------------------------------------------------------------------\n";
@@ -584,6 +674,7 @@ main(){ // block program utama
 		cout << "--------------------------------|5.| Teknik Audio Video             |--------------------------------\n";
 		cout << "--------------------------------|6.| Multi Media                    |--------------------------------\n";
 		cout << "-----------------------------------------------------------------------------------------------------\n"; 
+*/
 	system("pause");
  }
  
