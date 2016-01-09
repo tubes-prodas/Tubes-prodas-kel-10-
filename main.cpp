@@ -4,9 +4,7 @@
 #include <string.h>
 //add by taufiq
 #include <windows.h>
-
 using namespace std;
-//add by taufiq
 HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 COORD CursorPosition;
 
@@ -33,32 +31,8 @@ typedef struct {
 	int jurusan2;
 	int status;
 } pendaftaran;
-
-
-// area deklarasi fungsi dan procedure
-int menu(float tkj, float rpl, float titl, float toi, float av, float mm);
-void passing(float tkj, float rpl, float titl, float toi, float av, float mm);
-void login(input entry[20],float tkj, float rpl, float titl, float toi, float av, float mm, int *insiswa);
-void search(int insiswa);
-void gotoxy();
-void persyaratan(float tkj, float rpl, float titl, float toi, float av, float mm);
-void inputentry(input entry[200]);
-void inputsiswa(float tkj, float rpl, float titl, float toi, float av, float mm, int *insiswa);
-void datapendaftar(int insiswa);
-void dataditerima(int insiswa);
-void dataditolak(int insiswa);
-void ubahnilai();
-void standar();
-void upgrade(int stat, int insiswa);
-void rata_rata(float *tkj, float *rpl, float *titl, float *toi, float *av, float *mm);
-int seleksi(int jur,float tkj, float rpl, float titl, float toi, float av, float mm, int insiswa);
-int sorting(int stat, int insiswa);
-int counter (int n);
-
-// area deklarasi array dan variabel global
-pendaftaran siswa[200];
+//parameter global
 int inentry = 0;
-pelajaran jurusan[6];
 
 void gotoxy (int x, int y){
 	
@@ -66,52 +40,7 @@ void gotoxy (int x, int y){
 	CursorPosition.Y = y; // lokasi y = baris
 	SetConsoleCursorPosition(console,CursorPosition); // set lokasi / posisi dimana di print
 }
-
-
-main(){ // block program utama
- 	//parameter entry add by faisal
-	input entry[20];
-	float tkj,rpl,mm,toi,av,titl;
- 	int insiswa = 0;
-	int pilihan; 	
- 	//insiswa = insiswa + 1;
- 	standar();
- 	do{	
-		pilihan = menu(tkj, rpl, titl, toi, av, mm);
-		switch (pilihan){
-			case 1:
-					login(entry, tkj, rpl, titl, toi, av, mm, &insiswa);
-				break;
-			case 2:
-					search(insiswa);
-				break;
-			case 3:
-					persyaratan(tkj, rpl, titl, toi, av, mm);
-					system("pause");
-				break;
-			case 4:
-					system("cls");
-					cout << "======== Aplikasi Penerimaan Siswa Baru SMK Negeri 4 Bandung ========\n";
-					cout << "---------------------------------------------------------------------\n";
-					cout << "----------Terima Kasih Telah Menggunakan Aplikasi kami---------------\n";
-					cout << "---------------------------------------------------------------------\n";
-					
-					system("pause");
-				break;
-			default:
-					system("cls");
-					cout << "================ Maaf pilihan anda tidak terdefinisi ================\n";
-					cout << "---------------------------------------------------------------------\n";
-					cout << "----------------------- Silahkan Coba Lagi !!! ----------------------\n";
-					cout << "---------------------------------------------------------------------\n";
-					system("pause");
-				break;
-			}
-		system("cls");	
-	}while(pilihan != 4);	
-}
-
- void standar(){
+void standar(pelajaran jurusan[6]){
 	jurusan[0].matematika = 75;jurusan[0].b_indonesia = 75; jurusan[0].b_inggris = 75;jurusan[0].ipa = 75; // untuk jurusan tkj
 	jurusan[1].matematika = 75;jurusan[1].b_indonesia = 75; jurusan[1].b_inggris = 75;jurusan[1].ipa = 75; // untuk jurusan rpl
 	jurusan[2].matematika = 75;jurusan[2].b_indonesia = 75; jurusan[2].b_inggris = 75;jurusan[2].ipa = 75; // untuk jurusan mm
@@ -119,25 +48,18 @@ main(){ // block program utama
 	jurusan[4].matematika = 75;jurusan[4].b_indonesia = 75; jurusan[4].b_inggris = 75;jurusan[4].ipa = 75; // untuk jurusan toi
 	jurusan[5].matematika = 75;jurusan[5].b_indonesia = 75; jurusan[5].b_inggris = 75;jurusan[5].ipa = 75; // untuk jurusan titl
 }
+void rata_rata(pelajaran jurusan[6],float *tkj, float *rpl, float *titl, float *toi, float *av, float *mm){
+	*tkj = (jurusan[0].matematika + jurusan[0].b_inggris + jurusan[0].ipa + jurusan[0].b_indonesia);
+ 	*rpl = (jurusan[1].matematika + jurusan[1].b_inggris + jurusan[1].ipa + jurusan[1].b_indonesia);
+ 	*mm = (jurusan[2].matematika + jurusan[2].b_inggris + jurusan[2].ipa + jurusan[2].b_indonesia);
+ 	*av = (jurusan[3].matematika + jurusan[3].b_inggris + jurusan[3].ipa + jurusan[3].b_indonesia);
+ 	*toi = (jurusan[4].matematika + jurusan[4].b_inggris + jurusan[4].ipa + jurusan[4].b_indonesia);
+ 	*titl = (jurusan[5].matematika + jurusan[5].b_inggris + jurusan[5].ipa + jurusan[5].b_indonesia);
 
- int menu (float tkj, float rpl, float titl, float toi, float av, float mm){
-	int hasil;
-	cout << "======== Aplikasi Penerimaan Siswa Baru SMK Negeri 4 Bandung ========\n";
-	passing(tkj, rpl, titl, toi, av, mm);
-	cout << "Menu :\n";
-	cout << "---------------------------------------------------------------------\n";
-	cout << "1. Login\n" ;
-	cout << "2. Search\n" ;
-	cout << "3. Persyaratan Nilai\n" ;
-	cout << "4. Keluar\n" ;
-	cout << "---------------------------------------------------------------------\n";
-	cout << "Masukan no menu pilihan anda :" ;
-	cin  >> hasil;
-	return hasil;
- }
- 
- void passing(float tkj, float rpl, float titl, float toi, float av, float mm){
- 	rata_rata(&tkj, &rpl, &titl, &toi, &av, &mm);
+}
+
+void passing(pelajaran jurusan[6],float tkj, float rpl, float titl, float toi, float av, float mm){
+	rata_rata(jurusan,&tkj, &rpl, &titl, &toi, &av, &mm);
  	cout << "---------------------------------------------------------------------\n";
 	cout << "Passinggrade Saat Ini :\n";
 	cout << "---------------------------------------------------------------------\n";
@@ -148,111 +70,29 @@ main(){ // block program utama
 	cout << "5. Teknik Audio Video\t\t\t:"<<av<<"\n" ;
 	cout << "6. Multi Media\t\t\t\t:"<<mm<<"\n" ;
 	cout << "---------------------------------------------------------------------\n";
- }
- 
- void login(input entry[20],float tkj, float rpl, float titl, float toi, float av, float mm, int *insiswa){
-	char username[10],password[8];
-	system("cls");
+
+}
+int counter (int n){
+	return  n + 1;
+}
+int menu(pelajaran jurusan[6],float tkj, float rpl, float titl, float toi, float av, float mm){
+	int hasil;
+	cout << "======== Aplikasi Penerimaan Siswa Baru SMK Negeri 4 Bandung ========\n";
+	passing(jurusan,tkj, rpl, titl, toi, av, mm);
+	cout << "Menu :\n";
 	cout << "---------------------------------------------------------------------\n";
-	cout << "Login System :\n";
+	cout << "1. Login\n" ;
+	cout << "2. Search\n" ;
+	cout << "3. Persyaratan Nilai\n" ;
+	cout << "4. Keluar\n" ;
 	cout << "---------------------------------------------------------------------\n";
-	cout << "Masukan username\t: " ;
-	cin  >> username;
-	cout << "Masukan password\t: " ;
-	cin  >> password;
-	
-	if((strcmp(username,"admin") == 0)&&(strcmp(password,"admin") == 0)){
-		int m = 0;
-		while(m == 0){
-			cout << "======== Aplikasi Penerimaan Siswa Baru SMK Negeri 4 Bandung ========\n";
-		    cout << "---------------------------------------------------------------------\n";
-		    cout << "Selamat Datang Administrator!\n";
-			cout << "---------------------------------------------------------------------\n";
-			passing(tkj, rpl, titl, toi, av, mm);
-			cout << "Menu :\n";
-			cout << "---------------------------------------------------------------------\n";
-			cout << "1. Tambah User Tim Entry \n" ;
-			cout << "2. Ubah Standar Nilai\n" ;
-			cout << "3. Data Pendaftar\n" ;
-			cout << "4. Data Diterima\n" ;
-			cout << "5. Data Ditolak\n" ;
-			cout << "6. Logout\n" ;
-			cout << "---------------------------------------------------------------------\n";
-			cout << "Masukan no menu pilihan anda :" ;
-			int adminmenu;
-			cin  >> adminmenu;
-				switch(adminmenu){
-					case 1 :
-						inputentry(entry);
-						break;
-					case 2 :
-						system("cls");
-						ubahnilai();
-						break;
-					case 3 :
-						system("cls");
-						datapendaftar(*insiswa);
-						break;
-					case 4 :
-						system("cls");
-						dataditerima(*insiswa);
-						break;
-					case 5 :
-						system("cls");
-						dataditolak(*insiswa);
-						break;
-					case 6 :
-						m++;
-						break;
-					default :
-						break;
-				}
-		}
-		system("pause");
-	}else{
-		int stat =0;
-		for(int a = 0; a < 20 ;a++){
-			if((strcmp(username,entry[a].username) == 0)&&(strcmp(password,entry[a].password) == 0)){
-				system("cls");
-				int m  = 0;
-				stat++;
-				while(m == 0){
-					cout << "======== Aplikasi Penerimaan Siswa Baru SMK Negeri 4 Bandung ========\n";
-				    cout << "---------------------------------------------------------------------\n";
-				    cout << "Selamat Datang " << entry[a].username << "\n";
-					cout << "---------------------------------------------------------------------\n";
-					cout << "Menu :\n";
-					cout << "---------------------------------------------------------------------\n";
-					cout << "1. Tambah Data Pendaftar\n" ;
-					cout << "2. Logout\n" ;
-					cout << "---------------------------------------------------------------------\n";
-					cout << "Masukan menu pilihan :" ;
-					int entrymenu;
-					cin  >> entrymenu;
-						switch(entrymenu){
-							case 1 :
-								inputsiswa(tkj, rpl, titl, toi, av, mm, insiswa);
-								break;
-							case 2 :
-								m++;
-								break;
-							default :
-								break;
-						}
-				}
-				system("pause");
-				break;
-			}
-		}
-		if(stat == 0){
-			cout << "Username / Password Salah\n";
-			system("pause");
-		}
-	}
-	
- }
- 
- void search(int insiswa){
+	cout << "Masukan no menu pilihan anda :" ;
+	cin  >> hasil;
+	return hasil;
+
+}
+
+void search(pendaftaran siswa[200],int insiswa){
 	int  index;
 	system("cls");
 	cout << "---------------------------------------------------------------------\n";
@@ -289,11 +129,11 @@ main(){ // block program utama
 	cout << "|6.| Multi Media                    |\n";
 	cout << "-------------------------------------------------------------------------\n";
 	system("pause");
- }
- 
- void persyaratan(float tkj, float rpl, float titl, float toi, float av, float mm){
+
+}
+void persyaratan(pelajaran jurusan[6],float tkj, float rpl, float titl, float toi, float av, float mm){
   	system("cls");
-  	rata_rata(&tkj, &rpl, &titl, &toi, &av, &mm);
+  	rata_rata(jurusan,&tkj, &rpl, &titl, &toi, &av, &mm);
  	cout << "--------------------------------------------------------------------------------\n";
 	cout << "|NO| JURUSAN                        | MTK | B. ING | IPA | B. INDO | PASSING GRADE |\n";
 	cout << "--------------------------------------------------------------------------------\n";
@@ -304,133 +144,43 @@ main(){ // block program utama
 	cout << "|5.| Teknik Otomasi Industri        |  "<<jurusan[4].matematika <<" |   "<<jurusan[4].b_inggris<<"   |  "<<jurusan[4].ipa<<" |    "<<jurusan[4].b_indonesia<<"   |  "<<toi<<"       |\n";
 	cout << "|6.| Teknik Instalasi Tenaga Listrik|  "<<jurusan[5].matematika <<" |   "<<jurusan[5].b_inggris<<"   |  "<<jurusan[5].ipa<<" |    "<<jurusan[5].b_indonesia<<"   |  "<<titl<<"       |\n";
 	cout << "--------------------------------------------------------------------------------\n";
- }
- 
- void rata_rata(float *tkj, float *rpl, float *titl, float *toi, float *av, float *mm){
- 	*tkj = (jurusan[0].matematika + jurusan[0].b_inggris + jurusan[0].ipa + jurusan[0].b_indonesia);
- 	*rpl = (jurusan[1].matematika + jurusan[1].b_inggris + jurusan[1].ipa + jurusan[1].b_indonesia);
- 	*mm = (jurusan[2].matematika + jurusan[2].b_inggris + jurusan[2].ipa + jurusan[2].b_indonesia);
- 	*av = (jurusan[3].matematika + jurusan[3].b_inggris + jurusan[3].ipa + jurusan[3].b_indonesia);
- 	*toi = (jurusan[4].matematika + jurusan[4].b_inggris + jurusan[4].ipa + jurusan[4].b_indonesia);
- 	*titl = (jurusan[5].matematika + jurusan[5].b_inggris + jurusan[5].ipa + jurusan[5].b_indonesia);
- }
- 
- int counter (int n){
- 	return  n + 1;
- }
- 
- void inputsiswa(float tkj, float rpl, float titl, float toi, float av, float mm, int *insiswa){
-	bool exist; //inisialisasi variable local
-		cout<<*insiswa;
-		getche();
-	
-	do{	
-		exist = false; //inisiasi variable
-		system("cls");
-		cout << "---------------------------------------------------------------------\n";
-		cout << "Masukan No Pendaftaran \t\t\t: ";
-		cin  >> siswa[*insiswa].no_pendaftaran;
-		
-		
-		//add by faisal
-		//validasi no_pelajaran 
-		if(*insiswa != 0){
-			int i = 0;
-			while(i != (*insiswa) && exist != true){
-				if(siswa[i].no_pendaftaran == siswa[*insiswa].no_pendaftaran){
-					exist = true;
-				}
-				i++;
-			}
-			if (exist){
-				cout<<"Nomer pendaftaran sudah ada"<<endl;
-				getche();
-			}else{
-				exist = false;
-			}
-		}
-		cout<<*insiswa;
-	}while(exist != false);
-	
-		cout << "Masukan Nama Calon Siswa \t\t: ";
-		fflush(stdin);
-		cin.get(siswa[*insiswa].nama, 50);
-		cout << "Masukan Jenis Kelamin Calon Siswa (L/P) : ";
-		cin  >> siswa[*insiswa].jenis_kelamin;
-		cout << "---------------------------------------------------------------------\n";
-		cout << "|-----------Daftar Jurusan----------|\n";
-		cout << "|1.| Teknik Komputer dan Jaringan   |\n";
-		cout << "|2.| Teknik Rekayasa Perangkat Lunak|\n";
-		cout << "|3.| Multi Media                    |\n";
-		cout << "|4.| Teknik Audio Video             |\n";
-		cout << "|5.| Teknik Otomasi Industri        |\n";
-		cout << "|6.| Teknik Instalasi Tenaga Listrik|\n";
-		cout << "---------------------------------------------------------------------\n";
-		cout << "Masukan Pilihan Pertama : ";
-		cin  >> siswa[*insiswa].jurusan1;
-		cout << "Masukan Pilihan Kedua \t: ";
-		cin  >> siswa[*insiswa].jurusan2;
-		cout << "---------------------------------------------------------------------\n";
-		cout << "Masukan Nilai Bahasa Indonesia \t: ";
-		cin  >> siswa[*insiswa].nilai.b_indonesia;
-		cout << "Masukan Nilai Bahasa Inggris \t: ";
-		cin  >> siswa[*insiswa].nilai.b_inggris;
-		cout << "Masukan Nilai IPA \t\t: ";
-		cin  >> siswa[*insiswa].nilai.ipa;
-		cout << "Masukan Nilai Matematika \t: ";
-		cin  >> siswa[*insiswa].nilai.matematika;
-		
-		*insiswa= counter(*insiswa);
-		
-		//awal proses seleksi
-		int hasil = seleksi(siswa[*insiswa].jurusan1, tkj, rpl, titl, toi, av, mm, *insiswa);
-		if(hasil >0){
-		siswa[*insiswa].status = hasil;
-		}else{
-			hasil = seleksi(siswa[*insiswa].jurusan2, tkj, rpl, titl, toi, av, mm, *insiswa);
-			siswa[*insiswa].status = hasil;
-		}
-		 hasil = sorting(siswa[*insiswa].status, *insiswa);
-		 siswa[*insiswa].status = hasil;
-		 
-		 upgrade(siswa[*insiswa].status, *insiswa);
-						
-		//akhir
-		cout << "---------------------------------------------------------------------\n";
-		cout << "----------------------------Data Tersimpan---------------------------\n";
-		cout << "---------------------------------------------------------------------\n";
-	system("pause");
-	
-	system("cls");
- }
- 
- int sorting(int stat, int insiswa){
- 	int temp[20];
- 	int param = 0 ;
- 	int pl = stat;
+
+}
+void inputentry(input entry[200]){
+	cout << "Masukan Username :";
+	cin  >> entry[inentry].username;
+	cout << "Masukan Password :";
+	cin  >> entry[inentry].password;
+	inentry++;
+
+}
+void ubahnilai(pelajaran jurusan[6]){
+ int c;
  	
- 	for(int a = 0; a <= insiswa ; a++){
- 		if(siswa[a].status == stat){
- 			temp[param] = a;
- 			param++;
-		 }
-	}
-	
-	for(int b = 0; b <= param ; b++ ){
-		if((siswa[temp[b]].nilai.matematika <= siswa[insiswa].nilai.matematika)&&(siswa[temp[b]].nilai.ipa <= siswa[insiswa].nilai.ipa)&&(siswa[temp[b]].nilai.b_inggris <= siswa[insiswa].nilai.b_inggris)&&(siswa[temp[b]].nilai.b_indonesia <= siswa[insiswa].nilai.b_indonesia)){
-			siswa[temp[b]].status = -1;
-			stat = pl; 
-			break; 	
-		}else{
-			stat = -1;
-		}
-	}
-	
-	return stat;	
- }
- 
- void upgrade(int stat, int insiswa){
- 	int parx = 1,l = 0;
+ 	cout << "-------------------------------------------------------------------------\n";
+ 	cout << "|-----------Daftar Jurusan----------|\n";
+	cout << "|1.| Teknik Komputer dan Jaringan   |\n";
+	cout << "|2.| Teknik Rekayasa Perangkat Lunak|\n";
+	cout << "|3.| Teknik Instalasi Tenaga Listrik|\n";
+	cout << "|4.| Teknik Otomasi Industri        |\n";
+	cout << "|5.| Teknik Audio Video             |\n";
+	cout << "|6.| Multi Media                    |\n";
+	cout << "-------------------------------------------------------------------------\n";
+	cout << "Masukan Pilihan Jurusan	: ";
+	cin  >> c;
+
+	cout << "Masukan Nilai Matematika	: ";
+	cin  >> jurusan[c].matematika;
+	cout << "Masukan Nilai Bahasa Indo	: ";
+	cin  >> jurusan[c].b_indonesia ;
+	cout << "Masukan Nilai Bahasa Ingg	: ";
+	cin  >> jurusan[c].b_inggris;
+	cout << "Masukan Nilai IPA			: ";
+	cin  >> jurusan[c].ipa;
+
+}
+void upgrade(pelajaran jurusan[6],int stat,pendaftaran siswa[200],int insiswa){
+	int parx = 1,l = 0;
 	int c = stat;
 	c--; 	
  	float ratamat = jurusan[c].matematika, rataing = jurusan[c].b_inggris, rataind = jurusan[c].b_indonesia,rataipa = jurusan[c].ipa;
@@ -458,10 +208,10 @@ main(){ // block program utama
 	jurusan[c].ipa = rataipa;
 	jurusan[c].b_inggris = rataing;
 	jurusan[c].b_indonesia = rataind;
- }
- 
- int seleksi(int jur, float tkj, float rpl, float titl, float toi, float av, float mm, int insiswa){
- 	rata_rata( &tkj, &rpl, &titl, &toi, &av, &mm);
+
+}
+int seleksi(pelajaran jurusan[6],int jur,pendaftaran siswa[200],float tkj, float rpl, float titl, float toi, float av, float mm, int insiswa){
+	rata_rata(jurusan,&tkj, &rpl, &titl, &toi, &av, &mm);
  	float rata = (siswa[insiswa].nilai.matematika + siswa[insiswa].nilai.ipa + siswa[insiswa].nilai.b_inggris + siswa[insiswa].nilai.b_indonesia);
  	jur--;
 	if(jur == 0){
@@ -527,18 +277,119 @@ main(){ // block program utama
 	}else{
 		return -1;
 	}
- }
- 
- void inputentry(input entry[20]){
-	cout << "Masukan Username :";
-	cin  >> entry[inentry].username;
-	cout << "Masukan Password :";
-	cin  >> entry[inentry].password;
-	inentry++;
- }
- 
- void datapendaftar(int insiswa){
- 	//add by taufiq
+
+}
+int sorting(int stat, pendaftaran siswa[200],int insiswa){
+	int temp[20];
+ 	int param = 0 ;
+ 	int pl = stat;
+ 	
+ 	for(int a = 0; a <= insiswa ; a++){
+ 		if(siswa[a].status == stat){
+ 			temp[param] = a;
+ 			param++;
+		 }
+	}
+	
+	for(int b = 0; b <= param ; b++ ){
+		if((siswa[temp[b]].nilai.matematika <= siswa[insiswa].nilai.matematika)&&(siswa[temp[b]].nilai.ipa <= siswa[insiswa].nilai.ipa)&&(siswa[temp[b]].nilai.b_inggris <= siswa[insiswa].nilai.b_inggris)&&(siswa[temp[b]].nilai.b_indonesia <= siswa[insiswa].nilai.b_indonesia)){
+			siswa[temp[b]].status = -1;
+			stat = pl; 
+			break; 	
+		}else{
+			stat = -1;
+		}
+	}
+	
+	return stat;	
+}
+
+void inputsiswa(pelajaran jurusan[6],float tkj, pendaftaran siswa[200],float rpl, float titl, float toi, float av, float mm, int *insiswa){
+bool exist; //inisialisasi variable local
+		cout<<*insiswa;
+		getche();
+	
+	do{	
+		exist = false; //inisiasi variable
+		system("cls");
+		cout << "---------------------------------------------------------------------\n";
+		cout << "Masukan No Pendaftaran \t\t\t: ";
+		cin  >> siswa[*insiswa].no_pendaftaran;
+		
+		
+		//add by faisal
+		//validasi no_pelajaran 
+		if(*insiswa != 0){
+			int i = 0;
+			while(i != (*insiswa) && exist != true){
+				if(siswa[i].no_pendaftaran == siswa[*insiswa].no_pendaftaran){
+					exist = true;
+				}
+				i++;
+			}
+			if (exist){
+				cout<<"Nomer pendaftaran sudah ada"<<endl;
+				getche();
+			}else{
+				exist = false;
+			}
+		}
+		cout<<*insiswa;
+	}while(exist != false);
+	
+		cout << "Masukan Nama Calon Siswa \t\t: ";
+		fflush(stdin);
+		cin.get(siswa[*insiswa].nama, 50);
+		cout << "Masukan Jenis Kelamin Calon Siswa (L/P) : ";
+		cin  >> siswa[*insiswa].jenis_kelamin;
+		cout << "---------------------------------------------------------------------\n";
+		cout << "|-----------Daftar Jurusan----------|\n";
+		cout << "|1.| Teknik Komputer dan Jaringan   |\n";
+		cout << "|2.| Teknik Rekayasa Perangkat Lunak|\n";
+		cout << "|3.| Multi Media                    |\n";
+		cout << "|4.| Teknik Audio Video             |\n";
+		cout << "|5.| Teknik Otomasi Industri        |\n";
+		cout << "|6.| Teknik Instalasi Tenaga Listrik|\n";
+		cout << "---------------------------------------------------------------------\n";
+		cout << "Masukan Pilihan Pertama : ";
+		cin  >> siswa[*insiswa].jurusan1;
+		cout << "Masukan Pilihan Kedua \t: ";
+		cin  >> siswa[*insiswa].jurusan2;
+		cout << "---------------------------------------------------------------------\n";
+		cout << "Masukan Nilai Bahasa Indonesia \t: ";
+		cin  >> siswa[*insiswa].nilai.b_indonesia;
+		cout << "Masukan Nilai Bahasa Inggris \t: ";
+		cin  >> siswa[*insiswa].nilai.b_inggris;
+		cout << "Masukan Nilai IPA \t\t: ";
+		cin  >> siswa[*insiswa].nilai.ipa;
+		cout << "Masukan Nilai Matematika \t: ";
+		cin  >> siswa[*insiswa].nilai.matematika;
+		
+		*insiswa= counter(*insiswa);
+		
+		//awal proses seleksi
+		int hasil = seleksi(jurusan,siswa[*insiswa].jurusan1,siswa, tkj, rpl, titl, toi, av, mm, *insiswa);
+		if(hasil >0){
+		siswa[*insiswa].status = hasil;
+		}else{
+			hasil = seleksi(jurusan,siswa[*insiswa].jurusan2, siswa,tkj, rpl, titl, toi, av, mm, *insiswa);
+			siswa[*insiswa].status = hasil;
+		}
+		 hasil = sorting(siswa[*insiswa].status,siswa, *insiswa);
+		 siswa[*insiswa].status = hasil;
+		 
+		 upgrade(jurusan,siswa[*insiswa].status,siswa, *insiswa);
+						
+		//akhir
+		cout << "---------------------------------------------------------------------\n";
+		cout << "----------------------------Data Tersimpan---------------------------\n";
+		cout << "---------------------------------------------------------------------\n";
+	system("pause");
+	
+	system("cls");
+
+}
+void datapendaftar(pendaftaran siswa[200],int insiswa){
 	cout << "--------------------------------------------------------------------------------"<<endl;
 	cout << "---------------------Data Siswa Terdaftar---------------------------------------"<<endl;
 	cout << "--------------------------------------------------------------------------------"<<endl;
@@ -597,10 +448,11 @@ main(){ // block program utama
 	cout << "-----------------------------------------------------------------------------------------------------\n"; 
 	*/
 	system("pause");
- }
- 
- void dataditerima(int insiswa){
- 	for(int x = 0; x <= 5; x++){
+
+}
+
+void dataditerima(pendaftaran siswa[200],int insiswa){
+	for(int x = 0; x <= 5; x++){
 	cout << "--------------------------------------------------------------------------------"<<endl;
 	cout << "---------------------Data Siswa Terdaftar---------------------------------------"<<endl;
 	cout << "--------------------------------------------------------------------------------"<<endl;
@@ -609,7 +461,7 @@ main(){ // block program utama
 		for(int a = 0; a <= insiswa ; a++){
 			if(siswa[a].status == x){
 					gotoxy(0,a+8);
-					cout<< "|     |                  |     |       |       |     |        |        |     |";
+					cout<< "|     |                  |     |       |       |     |        |        |   |";
 					gotoxy(2,8+a);
 					cout<<siswa[a].no_pendaftaran;
 					
@@ -656,9 +508,9 @@ main(){ // block program utama
 	 */
 	 }
 	system("pause");
- }
- 
- void dataditolak(int insiswa){
+
+}
+void dataditolak(pendaftaran siswa[200],int insiswa){
 	 	cout << "--------------------------------------------------------------------------------"<<endl;
 		cout << "---------------------Data Siswa Terdaftar---------------------------------------"<<endl;
 		cout << "--------------------------------------------------------------------------------"<<endl;
@@ -668,7 +520,7 @@ main(){ // block program utama
 			if(siswa[a].status == -1){
 		 		
 				 	gotoxy(0,a+8);
-					cout<< "|     |                  |     |       |       |     |        |        |     |";
+					cout<< "|     |                  |     |       |       |     |        |        |   |";
 					gotoxy(2,8+a);
 					cout<<siswa[a].no_pendaftaran;
 					
@@ -696,45 +548,162 @@ main(){ // block program utama
 					cout<<siswa[a].nilai.ipa;
 					cout<<endl;
 				
-				//cout << "| "<<siswa[a].no_pendaftaran<<" | "<<siswa[a].nama<<" | "<<siswa[a].jenis_kelamin<<" | "<<siswa[a].jurusan1<<" | "<<siswa[a].jurusan2<<" | "<<siswa[a].nilai.matematika<<" | "<<siswa[a].nilai.b_inggris<<" | "<<siswa[a].nilai.b_indonesia<<" | "<<siswa[a].nilai.ipa<<" |\n";
-				//cout << "-----------------------------------------------------------------------------------------------------\n";	
-			}
-		}/*
-		cout << "-----------------------------------------------------------------------------------------------------\n";
-		cout << "---------------------------------------------Keterangan----------------------------------------------\n";
-		cout << "-----------------------------------------------------------------------------------------------------\n";
-		cout << "--------------------------------|-----------Daftar Jurusan----------|--------------------------------\n";
-		cout << "--------------------------------|1.| Teknik Komputer dan Jaringan   |--------------------------------\n";
-		cout << "--------------------------------|2.| Teknik Rekayasa Perangkat Lunak|--------------------------------\n";
-		cout << "--------------------------------|3.| Teknik Instalasi Tenaga Listrik|--------------------------------\n";
-		cout << "--------------------------------|4.| Teknik Otomasi Industri        |--------------------------------\n";
-		cout << "--------------------------------|5.| Teknik Audio Video             |--------------------------------\n";
-		cout << "--------------------------------|6.| Multi Media                    |--------------------------------\n";
-		cout << "-----------------------------------------------------------------------------------------------------\n"; 
-*/
+               }
 	system("pause");
- }
- 
- void ubahnilai(){
- 	int c;
- 	cout << "-------------------------------------------------------------------------\n";
- 	cout << "|-----------Daftar Jurusan----------|\n";
-	cout << "|1.| Teknik Komputer dan Jaringan   |\n";
-	cout << "|2.| Teknik Rekayasa Perangkat Lunak|\n";
-	cout << "|3.| Teknik Instalasi Tenaga Listrik|\n";
-	cout << "|4.| Teknik Otomasi Industri        |\n";
-	cout << "|5.| Teknik Audio Video             |\n";
-	cout << "|6.| Multi Media                    |\n";
-	cout << "-------------------------------------------------------------------------\n";
-	cout << "Masukan Pilihan Jurusan	: ";
-	cin  >> c;
-	cout << "Masukan Nilai Matematika	: ";
-	cin  >> jurusan[c].matematika;
-	cout << "Masukan Nilai Bahasa Indo	: ";
-	cin  >> jurusan[c].b_indonesia ;
-	cout << "Masukan Nilai Bahasa Ingg	: ";
-	cin  >> jurusan[c].b_inggris;
-	cout << "Masukan Nilai IPA			: ";
-	cin  >> jurusan[c].ipa;
+          } 
+    }
+
+/* run this program using the console pauser or add your own getch, system("pause") or input loop */
+void login(input entry[20],pendaftaran siswa[200],pelajaran jurusan[6],float tkj, float rpl, float titl, float toi, float av, float mm, int *insiswa){
+	char username[10],password[8];
+	system("cls");
+	cout << "---------------------------------------------------------------------\n";
+	cout << "Login System :\n";
+	cout << "---------------------------------------------------------------------\n";
+	cout << "Masukan username\t: " ;
+	cin  >> username;
+	cout << "Masukan password\t: " ;
+	cin  >> password;
 	
+	if((strcmp(username,"admin") == 0)&&(strcmp(password,"admin") == 0)){
+		int m = 0;
+		while(m == 0){
+			cout << "======== Aplikasi Penerimaan Siswa Baru SMK Negeri 4 Bandung ========\n";
+		    cout << "---------------------------------------------------------------------\n";
+		    cout << "Selamat Datang Administrator!\n";
+			cout << "---------------------------------------------------------------------\n";
+			passing(jurusan,tkj, rpl, titl, toi, av, mm);
+			cout << "Menu :\n";
+			cout << "---------------------------------------------------------------------\n";
+			cout << "1. Tambah User Tim Entry \n" ;
+			cout << "2. Ubah Standar Nilai\n" ;
+			cout << "3. Data Pendaftar\n" ;
+			cout << "4. Data Diterima\n" ;
+			cout << "5. Data Ditolak\n" ;
+			cout << "6. Logout\n" ;
+			cout << "---------------------------------------------------------------------\n";
+			cout << "Masukan no menu pilihan anda :" ;
+			int adminmenu;
+			cin  >> adminmenu;
+				switch(adminmenu){
+					case 1 :
+						inputentry(entry);
+						break;
+					case 2 :
+						system("cls");
+						ubahnilai(jurusan);
+						break;
+					case 3 :
+						system("cls");
+						datapendaftar(siswa,*insiswa);
+						break;
+					case 4 :
+						system("cls");
+						dataditerima(siswa,*insiswa);
+						break;
+					case 5 :
+						system("cls");
+						dataditolak(siswa,*insiswa);
+						break;
+					case 6 :
+						m++;
+						break;
+					default :
+						break;
+				}
+		}
+		system("pause");
+	}else{
+		int stat =0;
+		for(int a = 0; a < 20 ;a++){
+			if((strcmp(username,entry[a].username) == 0)&&(strcmp(password,entry[a].password) == 0)){
+				system("cls");
+				int m  = 0;
+				stat++;
+				while(m == 0){
+					cout << "======== Aplikasi Penerimaan Siswa Baru SMK Negeri 4 Bandung ========\n";
+				    cout << "---------------------------------------------------------------------\n";
+				    cout << "Selamat Datang " << entry[a].username << "\n";
+					cout << "---------------------------------------------------------------------\n";
+					cout << "Menu :\n";
+					cout << "---------------------------------------------------------------------\n";
+					cout << "1. Tambah Data Pendaftar\n" ;
+					cout << "2. Logout\n" ;
+					cout << "---------------------------------------------------------------------\n";
+					cout << "Masukan menu pilihan :" ;
+					int entrymenu;
+					cin  >> entrymenu;
+						switch(entrymenu){
+							case 1 :
+								inputsiswa(jurusan,tkj,siswa, rpl, titl, toi, av, mm, insiswa);
+								break;
+							case 2 :
+								m++;
+								break;
+							default :
+								break;
+						}
+				}
+				system("pause");
+				break;
+			}
+		}
+		if(stat == 0){
+			cout << "Username / Password Salah\n";
+			system("pause");
+		}
+	}
+	
+ }
+
+
+
+
+int main(int argc, char** argv) {
+	pendaftaran siswa[200];
+    int inentry = 0;
+    pelajaran jurusan[6];
+
+	input entry[20];
+	
+	float tkj,rpl,mm,toi,av,titl;
+ 	int insiswa = 0;
+	int pilihan; 	
+ 	//insiswa = insiswa + 1;
+ 	standar(jurusan);
+ 	do{	
+		pilihan = menu(jurusan,tkj, rpl, titl, toi, av, mm);
+		switch (pilihan){
+			case 1:
+					login(entry,siswa,jurusan, tkj, rpl, titl, toi, av, mm, &insiswa);
+				break;
+			case 2:
+					search(siswa,insiswa);
+				break;
+			case 3:
+					persyaratan(jurusan,tkj, rpl, titl, toi, av, mm);
+					system("pause");
+				break;
+			case 4:
+					system("cls");
+					cout << "======== Aplikasi Penerimaan Siswa Baru SMK Negeri 4 Bandung ========\n";
+					cout << "---------------------------------------------------------------------\n";
+					cout << "----------Terima Kasih Telah Menggunakan Aplikasi kami---------------\n";
+					cout << "---------------------------------------------------------------------\n";
+					
+					system("pause");
+				break;
+			default:
+					system("cls");
+					cout << "================ Maaf pilihan anda tidak terdefinisi ================\n";
+					cout << "---------------------------------------------------------------------\n";
+					cout << "----------------------- Silahkan Coba Lagi !!! ----------------------\n";
+					cout << "---------------------------------------------------------------------\n";
+					system("pause");
+				break;
+			}
+		system("cls");	
+	}while(pilihan != 4);	
+
+	return 0;
 }
