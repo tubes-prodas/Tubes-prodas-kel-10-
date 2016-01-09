@@ -1,4 +1,3 @@
-#define  NULL 0
 #include <iostream>
 #include <conio.h>
 #include <cstdlib>
@@ -39,7 +38,7 @@ typedef struct {
 // area deklarasi fungsi dan procedure
 int menu(float tkj, float rpl, float titl, float toi, float av, float mm);
 void passing(float tkj, float rpl, float titl, float toi, float av, float mm);
-void login(input entry[20],float tkj, float rpl, float titl, float toi, float av, float mm, int insiswa);
+void login(input entry[20],float tkj, float rpl, float titl, float toi, float av, float mm, int *insiswa);
 void search(int insiswa);
 void gotoxy();
 void persyaratan(float tkj, float rpl, float titl, float toi, float av, float mm);
@@ -50,10 +49,11 @@ void dataditerima(int insiswa);
 void dataditolak(int insiswa);
 void ubahnilai();
 void standar();
+void upgrade(int stat, int insiswa);
 void rata_rata(float *tkj, float *rpl, float *titl, float *toi, float *av, float *mm);
 int seleksi(int jur,float tkj, float rpl, float titl, float toi, float av, float mm, int insiswa);
 int sorting(int stat, int insiswa);
-void upgrade(int stat, int insiswa);
+int counter (int n);
 
 // area deklarasi array dan variabel global
 pendaftaran siswa[200];
@@ -72,18 +72,15 @@ main(){ // block program utama
  	//parameter entry add by faisal
 	input entry[20];
 	float tkj,rpl,mm,toi,av,titl;
- 	int insiswa;
-	bool first; 	
- 	
+ 	int insiswa = 0;
+	int pilihan; 	
  	//insiswa = insiswa + 1;
- 	
-	standar();
-	int i = 0;
-	while( i == 0){
-		int pilihan = menu(tkj, rpl, titl, toi, av, mm);
+ 	standar();
+ 	do{	
+		pilihan = menu(tkj, rpl, titl, toi, av, mm);
 		switch (pilihan){
 			case 1:
-					login(entry, tkj, rpl, titl, toi, av, mm, insiswa);
+					login(entry, tkj, rpl, titl, toi, av, mm, &insiswa);
 				break;
 			case 2:
 					search(insiswa);
@@ -98,7 +95,7 @@ main(){ // block program utama
 					cout << "---------------------------------------------------------------------\n";
 					cout << "----------Terima Kasih Telah Menggunakan Aplikasi kami---------------\n";
 					cout << "---------------------------------------------------------------------\n";
-					i++;
+					
 					system("pause");
 				break;
 			default:
@@ -109,11 +106,9 @@ main(){ // block program utama
 					cout << "---------------------------------------------------------------------\n";
 					system("pause");
 				break;
-		}
-		system("cls");		
-	}
- getche();
-
+			}
+		system("cls");	
+	}while(pilihan != 4);	
 }
 
  void standar(){
@@ -155,7 +150,7 @@ main(){ // block program utama
 	cout << "---------------------------------------------------------------------\n";
  }
  
- void login(input entry[20],float tkj, float rpl, float titl, float toi, float av, float mm, int insiswa, bool first){
+ void login(input entry[20],float tkj, float rpl, float titl, float toi, float av, float mm, int *insiswa){
 	char username[10],password[8];
 	system("cls");
 	cout << "---------------------------------------------------------------------\n";
@@ -196,15 +191,15 @@ main(){ // block program utama
 						break;
 					case 3 :
 						system("cls");
-						datapendaftar(insiswa);
+						datapendaftar(*insiswa);
 						break;
 					case 4 :
 						system("cls");
-						dataditerima(insiswa);
+						dataditerima(*insiswa);
 						break;
 					case 5 :
 						system("cls");
-						dataditolak(insiswa);
+						dataditolak(*insiswa);
 						break;
 					case 6 :
 						m++;
@@ -236,7 +231,7 @@ main(){ // block program utama
 					cin  >> entrymenu;
 						switch(entrymenu){
 							case 1 :
-								inputsiswa(tkj, rpl, titl, toi, av, mm, &insiswa, &first);
+								inputsiswa(tkj, rpl, titl, toi, av, mm, insiswa);
 								break;
 							case 2 :
 								m++;
@@ -320,28 +315,29 @@ main(){ // block program utama
  	*titl = (jurusan[5].matematika + jurusan[5].b_inggris + jurusan[5].ipa + jurusan[5].b_indonesia);
  }
  
- void inputsiswa(float tkj, float rpl, float titl, float toi, float av, float mm, int *insiswa, bool *first){
+ int counter (int n){
+ 	return  n + 1;
+ }
+ 
+ void inputsiswa(float tkj, float rpl, float titl, float toi, float av, float mm, int *insiswa){
 	bool exist; //inisialisasi variable local
-	char keluar = 'y';
-	int j = 0;	
-		
-	while (j <= 200 && (keluar == 'y' || keluar == 'Y')){	
-	do{
-		cout<<j;
+		cout<<*insiswa;
 		getche();
-		exist = false;
+	
+	do{	
+		exist = false; //inisiasi variable
 		system("cls");
 		cout << "---------------------------------------------------------------------\n";
 		cout << "Masukan No Pendaftaran \t\t\t: ";
-		cin  >> siswa[j].no_pendaftaran;
+		cin  >> siswa[*insiswa].no_pendaftaran;
 		
 		
 		//add by faisal
 		//validasi no_pelajaran 
 		if(*insiswa != 0){
 			int i = 0;
-			while(i != (j) && exist != true){
-				if(siswa[i].no_pendaftaran == siswa[j].no_pendaftaran){
+			while(i != (*insiswa) && exist != true){
+				if(siswa[i].no_pendaftaran == siswa[*insiswa].no_pendaftaran){
 					exist = true;
 				}
 				i++;
@@ -354,13 +350,13 @@ main(){ // block program utama
 			}
 		}
 		cout<<*insiswa;
-		
 	}while(exist != false);
+	
 		cout << "Masukan Nama Calon Siswa \t\t: ";
 		fflush(stdin);
-		cin.get(siswa[j].nama, 50);
+		cin.get(siswa[*insiswa].nama, 50);
 		cout << "Masukan Jenis Kelamin Calon Siswa (L/P) : ";
-		cin  >> siswa[j].jenis_kelamin;
+		cin  >> siswa[*insiswa].jenis_kelamin;
 		cout << "---------------------------------------------------------------------\n";
 		cout << "|-----------Daftar Jurusan----------|\n";
 		cout << "|1.| Teknik Komputer dan Jaringan   |\n";
@@ -371,33 +367,22 @@ main(){ // block program utama
 		cout << "|6.| Teknik Instalasi Tenaga Listrik|\n";
 		cout << "---------------------------------------------------------------------\n";
 		cout << "Masukan Pilihan Pertama : ";
-		cin  >> siswa[j].jurusan1;
+		cin  >> siswa[*insiswa].jurusan1;
 		cout << "Masukan Pilihan Kedua \t: ";
-		cin  >> siswa[j].jurusan2;
+		cin  >> siswa[*insiswa].jurusan2;
 		cout << "---------------------------------------------------------------------\n";
 		cout << "Masukan Nilai Bahasa Indonesia \t: ";
-		cin  >> siswa[j].nilai.b_indonesia;
+		cin  >> siswa[*insiswa].nilai.b_indonesia;
 		cout << "Masukan Nilai Bahasa Inggris \t: ";
-		cin  >> siswa[j].nilai.b_inggris;
+		cin  >> siswa[*insiswa].nilai.b_inggris;
 		cout << "Masukan Nilai IPA \t\t: ";
-		cin  >> siswa[j].nilai.ipa;
+		cin  >> siswa[*insiswa].nilai.ipa;
 		cout << "Masukan Nilai Matematika \t: ";
-		cin  >> siswa[j].nilai.matematika;
+		cin  >> siswa[*insiswa].nilai.matematika;
+		
+		*insiswa= counter(*insiswa);
 		
 		//awal proses seleksi
-		j++;
-		if (j == 1){
-			if(*first == false){
-				*insiswa = j;				
-			}else{
-				*insiswa++;
-			}	
-		}else{
-		 	*insiswa++;
-		}
-		
-		*first = true;
-		
 		int hasil = seleksi(siswa[*insiswa].jurusan1, tkj, rpl, titl, toi, av, mm, *insiswa);
 		if(hasil >0){
 		siswa[*insiswa].status = hasil;
@@ -414,9 +399,6 @@ main(){ // block program utama
 		cout << "---------------------------------------------------------------------\n";
 		cout << "----------------------------Data Tersimpan---------------------------\n";
 		cout << "---------------------------------------------------------------------\n";
-		cout << "\nIngin Tambah Data Lagi ? [y/n]";
-		keluar=getche();
-	}
 	system("pause");
 	
 	system("cls");
@@ -582,7 +564,7 @@ main(){ // block program utama
 		cout<<siswa[a].jurusan1;
 		
 		gotoxy(40,8+a);
-		cout<<siswa[a].jurusan1;
+		cout<<siswa[a].jurusan2;
 		gotoxy(49,8+a);
 		cout<<siswa[a].nilai.matematika;
 		
