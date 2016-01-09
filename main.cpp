@@ -38,11 +38,11 @@ typedef struct {
 // area deklarasi fungsi dan procedure
 int menu();
 void passing();
-void login();
+void login(input entry[20]);
 void search();
 void gotoxy();
 void persyaratan();
-void inputentry();
+void inputentry(input entry[200]);
 void inputsiswa();
 void datapendaftar();
 void dataditerima();
@@ -56,7 +56,6 @@ void upgrade(int stat);
 
 // area deklarasi array dan variabel global
 pendaftaran siswa[200];
-input entry[20];
 int inentry = 0,insiswa = 0;
 pelajaran jurusan[6];
 float tkj,rpl,mm,toi,av,titl;
@@ -70,13 +69,15 @@ void gotoxy (int x, int y){
 
 
 main(){ // block program utama
- 	standar();
- 	int i = 0;
+ 	input entry[20];
+ 	
+	 standar();
+	 int i = 0;
 	while( i == 0){
 		int pilihan = menu();
 		switch (pilihan){
 			case 1:
-					login();
+					login(entry);
 				break;
 			case 2:
 					search();
@@ -148,7 +149,7 @@ main(){ // block program utama
 	cout << "---------------------------------------------------------------------\n";
  }
  
- void login(){
+ void login(input entry[20]){
 	char username[10],password[8];
 	system("cls");
 	cout << "---------------------------------------------------------------------\n";
@@ -181,7 +182,7 @@ main(){ // block program utama
 			cin  >> adminmenu;
 				switch(adminmenu){
 					case 1 :
-						inputentry();
+						inputentry(entry);
 						break;
 					case 2 :
 						system("cls");
@@ -516,7 +517,7 @@ main(){ // block program utama
 	}
  }
  
- void inputentry(){
+ void inputentry(input entry[20]){
 	cout << "Masukan Username :";
 	cin  >> entry[inentry].username;
 	cout << "Masukan Password :";
