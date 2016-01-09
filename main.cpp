@@ -314,10 +314,34 @@ main(){ // block program utama
  }
  
  void inputsiswa(){
+	bool exist; //inisialisasi variable local
+	do{
+	exist = false;
 	system("cls");
 	cout << "---------------------------------------------------------------------\n";
 	cout << "Masukan No Pendaftaran \t\t\t: ";
 	cin  >> siswa[insiswa].no_pendaftaran;
+	
+	//add by isal
+	//validasi no_pelajaran 
+	if(insiswa != 0){
+		int i = 0;
+		while(i != (insiswa) && exist != true){
+			if(siswa[i].no_pendaftaran == siswa[insiswa].no_pendaftaran){
+				exist = true;
+			}
+			i++;
+		}
+		if (exist){
+			cout<<"Nomer pendaftaran sudah ada"<<endl;
+			getche();
+		}else{
+			exist = false;
+		}
+	}
+	cout<<insiswa;
+	}while(exist != false);
+	
 	cout << "Masukan Nama Calon Siswa \t\t: ";
 	fflush(stdin);
 	cin.get(siswa[insiswa].nama, 50);
